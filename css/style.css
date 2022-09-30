@@ -22,20 +22,39 @@
 /*******************************************/
 
 body {
+  height: 100vh;
+  background: #001100;
+  color: #9db8a7;
 
+  font-size: 18px;
 }
 
 
 /******************************************
 /* LAYOUT
 /*******************************************/
-header {
+header, footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  background: #000;
+}
+
+header {
+  height: 50px;
 }
 
 footer {
-
+  height: 20px;
+  font-size: .8em;
 }
+
+main {
+  height: calc(100% - 70px);
+}
+
+
 
 /******************************************
 /* ADDITIONAL STYLES
