@@ -20,26 +20,55 @@ const Deck = (() => {
         return array;
     }
 
+    function initShuffledDeck(numOfDecks){
+        return shuffleDeck(initDeck(numOfDecks));
+    }
+
     return {
-        initDeck,
-        shuffleDeck
+        initShuffledDeck
     }
 })()
 
 const GameCtrl = (() => {
 
-    // shuffled deck
-    let deck = Deck.shuffleDeck(Deck.initDeck(1));
-
+    const numOfDecks = 1;
     let dealerhand = [];
     let playerhand = [];
 
+    let deck = Deck.initShuffledDeck(numOfDecks);
+
+    // returns array of card values
+    // reshuffles new decks if run out
     function drawCards(numOfCards){
-        return deck.splice(0,2);
+        if (deck.length < numOfCards){
+
+            if (deck.length == 0){
+                deck = Deck.initShuffledDeck(numOfDecks);
+                return deck.splice(0, numOfCards);
+            }
+
+            // add rest of deck to array
+            let arr = [];
+            numOfCards -= deck.length;
+            arr = deck.splice(0,deck.length);
+
+            // set deck to new shuffled deck
+            deck = Deck.initShuffledDeck(numOfDecks);
+
+            // pull remaining cards
+            for(let i = 0; i < numOfCards; i++){
+                arr.push(deck.pop());
+            }
+            return arr;
+
+        } else {
+            return deck.splice(0,numOfCards);
+        }
     }
 
-    console.log(drawCards(2));
-    console.log(deck);
+    function newRound(){
+
+    }
 
 })();
 
