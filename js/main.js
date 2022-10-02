@@ -1,3 +1,32 @@
+
+
+let player = {
+    _chips: 100,
+    _hand: [],
+
+    get getChips(){
+        return this._chips;
+    },
+    set setChips(n){
+        this._chips = n;
+    },
+
+    get getHand(){
+        return this._hand;
+    },
+    set setHand(arr){
+        this._hand = arr;
+    },
+
+    addToHand(arr){
+        this._hand = this._hand.concat(arr);
+    },
+    updateChips(num){
+        this._chips += num;
+    }
+}
+
+
 const Deck = (() => {
 
     // returns array of cards with number of decks specified
@@ -27,7 +56,8 @@ const Deck = (() => {
     return {
         initShuffledDeck
     }
-})()
+})();
+
 
 const GameCtrl = (() => {
 
@@ -67,11 +97,20 @@ const GameCtrl = (() => {
     }
 
     function newRound(){
+        dealerhand = drawCards(2);
+        playerhand = drawCards(2);
 
+        //DisplayCtrl.update();
+    }
+
+    newRound();
+
+    return {
+        dealerhand,
+        playerhand
     }
 
 })();
-
 
 const DisplayCtrl = (() => {
     console.log('');
