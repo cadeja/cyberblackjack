@@ -21,14 +21,27 @@
 /* BASE STYLES
 /*******************************************/
 
+@font-face {
+  font-family: "digital-7";
+  src: url("../assets/fonts/digital-7.ttf");
+}
+
 body {
   height: 100vh;
   background: #001100;
-  color: #9db8a7;
+  color: green;
 
   font-size: 18px;
+  font-family: "digital-7";
+
 }
 
+button {
+  background: none;
+  border: none;
+  color: green;
+  font-family: "digital-7";
+}
 
 /******************************************
 /* LAYOUT
@@ -51,8 +64,48 @@ footer {
 }
 
 main {
+  display: flex;
+  flex-direction: column;
+
   height: calc(100% - 70px);
 }
+
+main > * {
+  border: 1px solid green;
+}
+
+
+.dealer-cards,
+.player-cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 30%;
+}
+
+.card {
+  margin: 10px;
+
+  font-size: 2em;
+}
+
+.buttons,
+.bets{
+  height: 20%;
+}
+
+.buttons{
+  display: flex;
+}
+
+.buttons > button {
+  width: 50%;
+
+  font-size: 2em;
+  border: 1px solid green;
+}
+
 
 
 
