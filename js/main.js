@@ -102,8 +102,6 @@ const Deck = (() => {
     }
 
 
-    
-
     return {
         deck,
         drawCards
@@ -118,6 +116,8 @@ const DisplayCtrl = (() => {
     function updateCardDisplay(){
         const dealerArea = document.querySelector('.dealer-cards');
         const playerArea = document.querySelector('.player-cards');
+        dealerArea.innerHTML = '';
+        playerArea.innerHTML = '';
 
         for (let i = 0; i < dealer.getHand.length; i++){
             dealerArea.innerHTML += `<div class="card">${dealer.getHand[i]}</div>`
@@ -139,6 +139,35 @@ const DisplayCtrl = (() => {
 // where the magic happens
 const GameCtrl = (() => {
 
+    function calcValue(hand){
+        
+        //get number of aces
+        let numOfAces = 0;
+        for (let i = 0; i < hand.length; i++){
+            if (hand[i] === 'A') numOfAces++;
+        }
+
+        // get value of cards that are not aces
+        let val = 0;
+        for (let i = 0; i < hand.length; i++){
+            if (Number(hand[i])){
+                val += Number(hand[i]);
+            } else if (hand[i] !== 'A'){
+                val += 10;
+            }
+        }
+
+        // handles ace values
+        if (numOfAces > 0){
+            if (val + 11 + (numOfAces - 1) <= 21){
+                val += 11 + (numOfAces - 1);
+            } else {
+                val += numOfAces;
+            }
+        }
+        return val;
+    }
+
     function newRound(){
         dealer.setHand = Deck.drawCards(2);
         player.setHand = Deck.drawCards(2);
@@ -146,7 +175,17 @@ const GameCtrl = (() => {
         DisplayCtrl.updateCardDisplay();
     }
 
-    newRound();
+    //hit button
+    const hit = document.querySelector('.hit');
+    hit.addEventListener('click',(e) => {
+        e.preventDefault();
+        player.addToHand(Deck.drawCards(1));
+        console.log(calcValue(player.getHand));
+        DisplayCtrl.updateCardDisplay();
+    })
 
+
+    newRound();
+    console.log(calcValue(player.getHand));
 })();
 
