@@ -1,53 +1,42 @@
 
-
-let player = {
-    _chips: 100,
-    _hand: [],
-    _handValue: 0,
+class Player {
+    constructor(chips){
+        this._chips = chips;
+    }
+    _hand = []
+    _handValue = 0
 
     get getChips(){
         return this._chips;
-    },
+    }
     set setChips(n){
         this._chips = n;
-    },
+    }
 
     get getHand(){
         return this._hand;
-    },
+    }
     set setHand(arr){
         this._hand = arr;
-    },
+    }
 
     get getHandValue(){
         return this._handValue;
-    },
+    }
     set setHandValue(n){
         this._handValue = n;
-    },
+    }
 
     addToHand(arr){
         this._hand = this._hand.concat(arr);
-    },
+    }
     updateChips(num){
         this._chips += num;
     }
 }
 
-let dealer = {
-    _hand: [],
-
-    get getHand(){
-        return this._hand;
-    },
-    set setHand(arr){
-        this._hand = arr;
-    },
-
-    addToHand(arr){
-        this._hand = this._hand.concat(arr);
-    },
-}
+let player = new Player(100);
+let dealer = new Player(0);
 
 // deck and deck related functions
 const Deck = (() => {
@@ -198,20 +187,36 @@ const GameCtrl = (() => {
     //             PLAYING STAGE               //
     /////////////////////////////////////////////
 
+
+    function newRound(){
+        //draw cards
+        dealer.addToHand(Deck.drawCards(2));
+        player.addToHand(Deck.drawCards(2));
+
+        dealer.setHandValue = calcValue(dealer.getHand);
+        player.setHandValue = calcValue(player.getHand);
+
+        //check for natural blackjack
+
+
+    }
+
     function hit(){
-        // ...
+        //add 1 card to hand
+        //get new hand value
     }
 
     function stand(){
-        // ...
+        // make console inactive
+        // trigger dealer turn
     }
 
     // event listeners
-    const hit = document.querySelector('.hit');
-    hit.addEventListener('click',hit);
+    const hitBtn = document.querySelector('.hit');
+    hitBtn.addEventListener('click',hit);
 
-    const stand = document.querySelector('.stand');
-    stand.addEventListener('click',stand);
+    const standBtn = document.querySelector('.stand');
+    standBtn.addEventListener('click',stand);
 
 
     /////////////////////////////////////////////
