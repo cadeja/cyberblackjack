@@ -44,11 +44,13 @@ let dealer = {
 
 const Deck = (() => {
 
+    const _numOfDecks = 1;
+
     // returns array of cards with number of decks specified
     // all values in array are strings
-    function initDeck(numOfDecks){
+    function initDeck(num){
         let deck = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
-        return [].concat(... new Array(numOfDecks * 4).fill(deck));
+        return [].concat(... new Array(num * 4).fill(deck));
     }
 
     // randomizes order of items in array
@@ -64,14 +66,50 @@ const Deck = (() => {
         return array;
     }
 
-    function initShuffledDeck(numOfDecks){
-        return shuffleDeck(initDeck(numOfDecks));
+    function initShuffledDeck(num){
+        return shuffleDeck(initDeck(num));
     }
 
+    let deck = initShuffledDeck(_numOfDecks);
+
+    // returns array of card values
+    // reshuffles new decks if run out
+    function drawCards(numOfCards){
+        if (deck.length < numOfCards){
+
+            if (deck.length == 0){
+                deck = Deck.initShuffledDeck(_numOfDecks);
+                return deck.splice(0, numOfCards);
+            }
+
+            // add rest of deck to array
+            let arr = [];
+            numOfCards -= deck.length;
+            arr = deck.splice(0,deck.length);
+
+            // set deck to new shuffled deck
+            deck = Deck.initShuffledDeck(_numOfDecks);
+
+            // pull remaining cards
+            for(let i = 0; i < numOfCards; i++){
+                arr.push(deck.pop());
+            }
+            return arr;
+
+        } else {
+            return deck.splice(0,numOfCards);
+        }
+    }
+
+
+    
+
     return {
-        initShuffledDeck
+        deck,
+        drawCards
     }
 })();
+
 
 const DisplayCtrl = (() => {
     function updateCardDisplay(){
@@ -95,42 +133,11 @@ const DisplayCtrl = (() => {
 
 const GameCtrl = (() => {
 
-    const numOfDecks = 1;
-
-    let deck = Deck.initShuffledDeck(numOfDecks);
-
-    // returns array of card values
-    // reshuffles new decks if run out
-    function drawCards(numOfCards){
-        if (deck.length < numOfCards){
-
-            if (deck.length == 0){
-                deck = Deck.initShuffledDeck(numOfDecks);
-                return deck.splice(0, numOfCards);
-            }
-
-            // add rest of deck to array
-            let arr = [];
-            numOfCards -= deck.length;
-            arr = deck.splice(0,deck.length);
-
-            // set deck to new shuffled deck
-            deck = Deck.initShuffledDeck(numOfDecks);
-
-            // pull remaining cards
-            for(let i = 0; i < numOfCards; i++){
-                arr.push(deck.pop());
-            }
-            return arr;
-
-        } else {
-            return deck.splice(0,numOfCards);
-        }
-    }
+    
 
     function newRound(){
-        dealer.setHand = drawCards(2);
-        player.setHand = drawCards(2);
+        dealer.setHand = Deck.drawCards(2);
+        player.setHand = Deck.drawCards(2);
 
         DisplayCtrl.updateCardDisplay();
     }
