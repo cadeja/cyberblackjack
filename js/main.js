@@ -26,6 +26,21 @@ let player = {
     }
 }
 
+let dealer = {
+    _hand: [],
+
+    get getHand(){
+        return this._hand;
+    },
+    set setHand(arr){
+        this._hand = arr;
+    },
+
+    addToHand(arr){
+        this._hand = this._hand.concat(arr);
+    },
+}
+
 
 const Deck = (() => {
 
@@ -58,12 +73,29 @@ const Deck = (() => {
     }
 })();
 
+const DisplayCtrl = (() => {
+    function updateCardDisplay(){
+        const dealerArea = document.querySelector('.dealer-cards');
+        const playerArea = document.querySelector('.player-cards');
+
+        for (let i = 0; i < dealer.getHand.length; i++){
+            dealerArea.innerHTML += `<div class="card">${dealer.getHand[i]}</div>`
+        }
+        for (let i = 0; i < player.getHand.length; i++){
+            playerArea.innerHTML += `<div class="card">${player.getHand[i]}</div>`
+        }
+    }
+
+
+    return {
+        updateCardDisplay
+    }
+})();
+
 
 const GameCtrl = (() => {
 
     const numOfDecks = 1;
-    let dealerhand = [];
-    let playerhand = [];
 
     let deck = Deck.initShuffledDeck(numOfDecks);
 
@@ -97,21 +129,13 @@ const GameCtrl = (() => {
     }
 
     function newRound(){
-        dealerhand = drawCards(2);
-        playerhand = drawCards(2);
+        dealer.setHand = drawCards(2);
+        player.setHand = drawCards(2);
 
-        //DisplayCtrl.update();
+        DisplayCtrl.updateCardDisplay();
     }
 
     newRound();
 
-    return {
-        dealerhand,
-        playerhand
-    }
-
 })();
 
-const DisplayCtrl = (() => {
-    console.log('');
-})();
