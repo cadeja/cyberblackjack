@@ -41,7 +41,7 @@ let dealer = {
     },
 }
 
-
+// deck and deck related functions
 const Deck = (() => {
 
     const _numOfDecks = 1;
@@ -111,7 +111,10 @@ const Deck = (() => {
 })();
 
 
+// handles any ui/ux side updates
 const DisplayCtrl = (() => {
+
+    // takes hands from player/dealer objs and displays cards in html
     function updateCardDisplay(){
         const dealerArea = document.querySelector('.dealer-cards');
         const playerArea = document.querySelector('.player-cards');
@@ -131,9 +134,10 @@ const DisplayCtrl = (() => {
 })();
 
 
-const GameCtrl = (() => {
 
-    
+
+// where the magic happens
+const GameCtrl = (() => {
 
     function newRound(){
         dealer.setHand = Deck.drawCards(2);
