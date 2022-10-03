@@ -3,6 +3,7 @@
 let player = {
     _chips: 100,
     _hand: [],
+    _handValue: 0,
 
     get getChips(){
         return this._chips;
@@ -16,6 +17,13 @@ let player = {
     },
     set setHand(arr){
         this._hand = arr;
+    },
+
+    get getHandValue(){
+        return this._handValue;
+    },
+    set setHandValue(n){
+        this._handValue = n;
     },
 
     addToHand(arr){
@@ -120,16 +128,28 @@ const DisplayCtrl = (() => {
         playerArea.innerHTML = '';
 
         for (let i = 0; i < dealer.getHand.length; i++){
-            dealerArea.innerHTML += `<div class="card">${dealer.getHand[i]}</div>`
+            if (i == 0){
+                dealerArea.innerHTML += `<div class="card">?</div>`
+            } else {
+                dealerArea.innerHTML += `<div class="card">${dealer.getHand[i]}</div>`
+            }
         }
         for (let i = 0; i < player.getHand.length; i++){
             playerArea.innerHTML += `<div class="card">${player.getHand[i]}</div>`
         }
     }
 
+    function revealDealerCards(){
+        const dealerArea = document.querySelector('.dealer-cards');
+        dealerArea.innerHTML = '';
+        for (let i = 0; i < dealer.getHand.length; i++){
+                dealerArea.innerHTML += `<div class="card">${dealer.getHand[i]}</div>`
+        }
+    }
 
     return {
-        updateCardDisplay
+        updateCardDisplay,
+        revealDealerCards
     }
 })();
 
@@ -139,6 +159,7 @@ const DisplayCtrl = (() => {
 // where the magic happens
 const GameCtrl = (() => {
 
+    // returns int value of hand
     function calcValue(hand){
         
         //get number of aces
@@ -168,24 +189,51 @@ const GameCtrl = (() => {
         return val;
     }
 
-    function newRound(){
-        dealer.setHand = Deck.drawCards(2);
-        player.setHand = Deck.drawCards(2);
+    /////////////////////////////////////////////
+    //             BETTING STAGE               //
+    /////////////////////////////////////////////
 
-        DisplayCtrl.updateCardDisplay();
+
+    /////////////////////////////////////////////
+    //             PLAYING STAGE               //
+    /////////////////////////////////////////////
+
+    function hit(){
+        // ...
     }
 
-    //hit button
+    function stand(){
+        // ...
+    }
+
+    // event listeners
     const hit = document.querySelector('.hit');
-    hit.addEventListener('click',(e) => {
-        e.preventDefault();
-        player.addToHand(Deck.drawCards(1));
-        console.log(calcValue(player.getHand));
-        DisplayCtrl.updateCardDisplay();
-    })
+    hit.addEventListener('click',hit);
+
+    const stand = document.querySelector('.stand');
+    stand.addEventListener('click',stand);
 
 
-    newRound();
-    console.log(calcValue(player.getHand));
+    /////////////////////////////////////////////
+    //                 ROUND END               //
+    /////////////////////////////////////////////
+
+
 })();
 
+
+
+//game flow
+
+//player places bet
+//deal cards
+
+//player chooses to hit or stand
+//player can hit until bust
+
+//after player stands, dealer hits/stands with the following logic:
+//if cards value is less than 17, hit until at or above seventeen, else stand
+
+//reveal dealerhand
+
+// round over
