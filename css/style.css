@@ -114,7 +114,13 @@ main > * {
 }
 
 .playing {
-  border: 1px solid white;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.playing > button{
+  border: 1px solid green;
+  width: 50%;
 }
 
 .complete {
