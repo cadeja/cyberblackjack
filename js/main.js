@@ -23,9 +23,6 @@ class Player {
     get getHandValue(){
         return this._handValue;
     }
-    set setHandValue(n){
-        this._handValue = n;
-    }
 
     addToHand(arr){
         this._hand = this._hand.concat(arr);
@@ -33,6 +30,41 @@ class Player {
     updateChips(num){
         this._chips += num;
     }
+
+    calcValue(){
+
+        if (this._hand.length == 0) return 0;
+
+        let hand = this._hand.slice();
+        
+        //get number of aces
+        let numOfAces = 0;
+        for (let i = 0; i < hand.length; i++){
+            if (hand[i] === 'A') numOfAces++;
+        }
+
+        // get value of cards that are not aces
+        let val = 0;
+        for (let i = 0; i < hand.length; i++){
+            if (Number(hand[i])){
+                val += Number(hand[i]);
+            } else if (hand[i] !== 'A'){
+                val += 10;
+            }
+        }
+
+        // handles ace values
+        if (numOfAces > 0){
+            if (val + 11 + (numOfAces - 1) <= 21){
+                val += 11 + (numOfAces - 1);
+            } else {
+                val += numOfAces;
+            }
+        }
+        this._handValue = val;
+        return val;
+    }
+
 }
 
 let player = new Player(100);
@@ -147,36 +179,6 @@ const DisplayCtrl = (() => {
 
 // where the magic happens
 const GameCtrl = (() => {
-
-    // returns int value of hand
-    function calcValue(hand){
-        
-        //get number of aces
-        let numOfAces = 0;
-        for (let i = 0; i < hand.length; i++){
-            if (hand[i] === 'A') numOfAces++;
-        }
-
-        // get value of cards that are not aces
-        let val = 0;
-        for (let i = 0; i < hand.length; i++){
-            if (Number(hand[i])){
-                val += Number(hand[i]);
-            } else if (hand[i] !== 'A'){
-                val += 10;
-            }
-        }
-
-        // handles ace values
-        if (numOfAces > 0){
-            if (val + 11 + (numOfAces - 1) <= 21){
-                val += 11 + (numOfAces - 1);
-            } else {
-                val += numOfAces;
-            }
-        }
-        return val;
-    }
 
     /////////////////////////////////////////////
     //             BETTING STAGE               //
