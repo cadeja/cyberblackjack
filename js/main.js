@@ -241,19 +241,13 @@ const GameCtrl = (() => {
 
         //check for natural blackjack
         if (dealer.getHandValue == 21 && player.getHandValue == 21){
-            // return chips
-            // end round
-
-            console.log('tie');
-            roundEnd();
+            roundEnd('tie');
         }
         else if (dealer.getHandValue == 21){
-            console.log('dealer wins');
-            roundEnd();
+            roundEnd('lose');
         }
         else if (player.getHandValue == 21){
-            console.log('player gets natural blackjack');
-            roundEnd();
+            roundEnd('naturalwin');
 
             // payout 1.5x chips
         }
@@ -275,7 +269,6 @@ const GameCtrl = (() => {
             bust();
         } else if (player.getHandValue == 21){
             blackjack();
-            dealerTurn();
         }
     }
 
@@ -306,9 +299,19 @@ const GameCtrl = (() => {
             DisplayCtrl.updateCardDisplay();
         } else{
             clearInterval(dealerTimeout);
-            roundEnd();
+
+            if (dealer.getHandValue > 21){
+                roundEnd('win');
+            }
+
+            else if (player.getHandValue > dealer.getHandValue){
+                roundEnd('win');
+            } else if (player.getHandValue < dealer.getHandValue){
+                roundEnd('lose');
+            } else if (player.getHandValue == dealer.getHandValue){
+                roundEnd('tie');
+            }
         }
-        
     }
 
 
@@ -318,17 +321,32 @@ const GameCtrl = (() => {
 
     function bust(){
         console.log('bust');
-        roundEnd();
+        roundEnd('lose');
     }
 
 
     function blackjack(){
-
         console.log('blackjack');
+        dealerTurn();
     }
 
-    function roundEnd(){
+    function roundEnd(result){
         DisplayCtrl.revealDealerCards();
+
+        switch(result){
+            case 'win':
+                console.log('you win the round');
+                break;
+            case 'naturalwin':
+                console.log('natural blackjack! + 1.5x bet chips');
+                break;
+            case 'lose':
+                console.log('dealer wins the round');
+                break;
+            case 'tie':
+                console.log('you tie. Bet returned');
+                break;
+        }
 
         console.log('round end');
         DisplayCtrl.changeConsole(2);
