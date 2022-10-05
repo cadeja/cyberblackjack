@@ -168,9 +168,28 @@ const DisplayCtrl = (() => {
         }
     }
 
+    // changes console between different states
+    // 0: betting, 1: playing, 2: roundEnd
+    function changeConsole(num){
+        const betting = document.querySelector('.betting');
+        const playing = document.querySelector('.playing');
+        const roundEnd = document.querySelector('.round-end');
+
+        let arr = [betting, playing, roundEnd];
+
+        for (let i = 0; i < arr.length; i++){
+            if (i === num){
+                arr[i].classList.remove('inactive');
+            } else {
+                arr[i].classList.add('inactive');
+            }
+        }
+    }
+
     return {
         updateCardDisplay,
-        revealDealerCards
+        revealDealerCards,
+        changeConsole
     }
 })();
 
@@ -205,7 +224,15 @@ const GameCtrl = (() => {
 
     function hit(){
         //add 1 card to hand
+        player.addToHand(Deck.drawCards(2));
         //get new hand value
+        player.calcValue();
+
+        //check for bust
+        //if bust, change console to round-end
+        if(player.getHandValue > 21){
+            console.log('Bust!');
+        }
     }
 
     function stand(){

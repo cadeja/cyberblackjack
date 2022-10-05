@@ -127,6 +127,10 @@ main > * {
   border: 1px solid blue;
 }
 
+.inactive {
+  display: none;
+}
+
 
 
 
