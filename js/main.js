@@ -26,6 +26,7 @@ class Player {
 
     addToHand(arr){
         this._hand = this._hand.concat(arr);
+        this.calcValue();
     }
     updateChips(num){
         this._chips += num;
@@ -130,6 +131,9 @@ const Deck = (() => {
         }
     }
 
+    function draw(numOfCards, player){
+        player.addToHand(drawCards(numOfCards));
+    }
 
     return {
         deck,
@@ -213,31 +217,54 @@ const GameCtrl = (() => {
         //draw cards
         dealer.addToHand(Deck.drawCards(2));
         player.addToHand(Deck.drawCards(2));
+        DisplayCtrl.updateCardDisplay();
 
-        dealer.setHandValue = calcValue(dealer.getHand);
-        player.setHandValue = calcValue(player.getHand);
+        dealer.calcValue()
+        player.calcValue();
 
         //check for natural blackjack
+        if (dealer.getHandValue == 21 && player.getHandValue == 21){
+            // return chips
+            // end round
 
+            console.log('tie');
+            roundEnd();
+        }
+        else if (dealer.getHandValue == 21){
+            console.log('dealer wins');
+            roundEnd();
+        }
+        else if (player.getHandValue == 21){
+            console.log('player gets natural blackjack');
+            roundEnd();
+
+            // payout 1.5x chips
+        }
 
     }
 
+
+
     function hit(){
         //add 1 card to hand
-        player.addToHand(Deck.drawCards(2));
+        player.addToHand(Deck.drawCards(1));
+        DisplayCtrl.updateCardDisplay();
         //get new hand value
         player.calcValue();
 
         //check for bust
         //if bust, change console to round-end
         if(player.getHandValue > 21){
-            console.log('Bust!');
+            bust();
+        } else if (player.getHandValue == 21){
+            blackjack();
         }
     }
 
     function stand(){
         // make console inactive
         // trigger dealer turn
+        dealerTurn();
     }
 
     // event listeners
@@ -248,9 +275,48 @@ const GameCtrl = (() => {
     standBtn.addEventListener('click',stand);
 
 
+    // DEALER LOGIC
+
+    function dealerTurn(){
+        while(dealer.getHandValue < 17){
+            dealer.addToHand(Deck.drawCards(1));
+            dealer.calcValue();
+            DisplayCtrl.updateCardDisplay();
+        }
+        DisplayCtrl.revealDealerCards();
+    }
+
+
+
     /////////////////////////////////////////////
     //                 ROUND END               //
     /////////////////////////////////////////////
+
+    function bust(){
+        console.log('test');
+    }
+
+    function blackjack(){
+        if(player.getHand.length == 2){
+            console.log('natural blackjack');
+
+            // check if dealer has natural blackjack ??
+            // if so, return chips
+            // else, player wins 1.5x chips
+        } else {
+            console.log('blackjack');
+        }
+    }
+
+    function roundEnd(){
+        DisplayCtrl.revealDealerCards();
+        console.log('round end');
+    }
+
+    newRound();
+
+
+
 
 
 })();
