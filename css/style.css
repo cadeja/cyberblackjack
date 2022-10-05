@@ -131,7 +131,11 @@ main > * {
   display: none;
 }
 
-
+.chips {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 /******************************************

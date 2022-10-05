@@ -195,10 +195,17 @@ const DisplayCtrl = (() => {
         }
     }
 
+    function updateChips(){
+        const chips = document.querySelector('#chips');
+        chips.textContent = player.getChips;
+    }
+
+
     return {
         updateCardDisplay,
         revealDealerCards,
-        changeConsole
+        changeConsole,
+        updateChips
     }
 })();
 
@@ -223,9 +230,9 @@ const GameCtrl = (() => {
         player.resetHand();
         dealer.resetHand();
 
-        //change console
         DisplayCtrl.changeConsole(1);
 
+        DisplayCtrl.updateChips();
 
         //draw cards
         Deck.draw(2,dealer);
@@ -266,7 +273,6 @@ const GameCtrl = (() => {
         //if bust, change console to round-end
         if(player.getHandValue > 21){
             bust();
-            dealerTurn();
         } else if (player.getHandValue == 21){
             blackjack();
             dealerTurn();
@@ -274,7 +280,7 @@ const GameCtrl = (() => {
     }
 
     function stand(){
-        // make console inactive
+        DisplayCtrl.changeConsole(2);
         // trigger dealer turn
         dealerTurn();
     }
@@ -299,7 +305,6 @@ const GameCtrl = (() => {
             Deck.draw(1,dealer);
             DisplayCtrl.updateCardDisplay();
         } else{
-            DisplayCtrl.revealDealerCards();
             clearInterval(dealerTimeout);
             roundEnd();
         }
@@ -313,6 +318,7 @@ const GameCtrl = (() => {
 
     function bust(){
         console.log('bust');
+        roundEnd();
     }
 
 
