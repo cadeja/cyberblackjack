@@ -137,7 +137,7 @@ const Deck = (() => {
 
     return {
         deck,
-        drawCards
+        draw
     }
 })();
 
@@ -215,8 +215,8 @@ const GameCtrl = (() => {
 
     function newRound(){
         //draw cards
-        dealer.addToHand(Deck.drawCards(2));
-        player.addToHand(Deck.drawCards(2));
+        Deck.draw(2,dealer);
+        Deck.draw(2,player);
         DisplayCtrl.updateCardDisplay();
 
         dealer.calcValue()
@@ -247,7 +247,7 @@ const GameCtrl = (() => {
 
     function hit(){
         //add 1 card to hand
-        player.addToHand(Deck.drawCards(1));
+        Deck.draw(1,player);
         DisplayCtrl.updateCardDisplay();
         //get new hand value
         player.calcValue();
@@ -279,8 +279,7 @@ const GameCtrl = (() => {
 
     function dealerTurn(){
         while(dealer.getHandValue < 17){
-            dealer.addToHand(Deck.drawCards(1));
-            dealer.calcValue();
+            Deck.draw(1,dealer);
             DisplayCtrl.updateCardDisplay();
         }
         DisplayCtrl.revealDealerCards();
