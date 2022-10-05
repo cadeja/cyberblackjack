@@ -32,6 +32,11 @@ class Player {
         this._chips += num;
     }
 
+    resetHand(){
+        this._hand = [];
+        this._handValue = 0;
+    }
+
     calcValue(){
 
         if (this._hand.length == 0) return 0;
@@ -214,13 +219,18 @@ const GameCtrl = (() => {
 
 
     function newRound(){
+        //clear hands
+        player.resetHand();
+        dealer.resetHand();
+
+        //change console
+        DisplayCtrl.changeConsole(1);
+
+
         //draw cards
         Deck.draw(2,dealer);
         Deck.draw(2,player);
         DisplayCtrl.updateCardDisplay();
-
-        dealer.calcValue()
-        player.calcValue();
 
         //check for natural blackjack
         if (dealer.getHandValue == 21 && player.getHandValue == 21){
@@ -256,8 +266,10 @@ const GameCtrl = (() => {
         //if bust, change console to round-end
         if(player.getHandValue > 21){
             bust();
+            dealerTurn();
         } else if (player.getHandValue == 21){
             blackjack();
+            dealerTurn();
         }
     }
 
@@ -277,14 +289,22 @@ const GameCtrl = (() => {
 
     // DEALER LOGIC
 
+    // 1s interval between dealer card pulls
+    let dealerTimeout;
     function dealerTurn(){
-        while(dealer.getHandValue < 17){
+        dealerTimeout = setInterval(dealerDraw, 1000);
+    }
+    function dealerDraw(){
+        if (dealer.getHandValue < 17){
             Deck.draw(1,dealer);
             DisplayCtrl.updateCardDisplay();
+        } else{
+            DisplayCtrl.revealDealerCards();
+            clearInterval(dealerTimeout);
+            roundEnd();
         }
-        DisplayCtrl.revealDealerCards();
+        
     }
-
 
 
     /////////////////////////////////////////////
@@ -292,31 +312,26 @@ const GameCtrl = (() => {
     /////////////////////////////////////////////
 
     function bust(){
-        console.log('test');
+        console.log('bust');
     }
 
-    function blackjack(){
-        if(player.getHand.length == 2){
-            console.log('natural blackjack');
 
-            // check if dealer has natural blackjack ??
-            // if so, return chips
-            // else, player wins 1.5x chips
-        } else {
-            console.log('blackjack');
-        }
+    function blackjack(){
+
+        console.log('blackjack');
     }
 
     function roundEnd(){
         DisplayCtrl.revealDealerCards();
+
         console.log('round end');
+        DisplayCtrl.changeConsole(2);
+        setTimeout(newRound, 3000);
     }
 
+
+    //start game
     newRound();
-
-
-
-
 
 })();
 
