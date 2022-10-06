@@ -34,6 +34,8 @@ class Player {
         } else {
             this._bet = n;
         }
+
+        this.updateChips(- this._bet);
     }
 
     addToHand(arr){
@@ -212,6 +214,39 @@ const DisplayCtrl = (() => {
     }
 
 
+    //betting console
+    
+    // value must be 'hund', 'ten', or 'one'
+    function betUp(value){
+        const valUp = document.querySelector(`.${value}-up`);
+        valUp.addEventListener('click', () => {
+            const val = document.querySelector(`.${value}-digit`);
+            if (val.textContent == '9'){
+                val.textContent = '0';
+            } else {
+                val.textContent = String(Number(val.textContent) + 1);
+            }
+        });
+    }
+    function betDown(value){
+        const valDown = document.querySelector(`.${value}-down`);
+        valDown.addEventListener('click', () => {
+            const val = document.querySelector(`.${value}-digit`);
+            if (val.textContent == '0'){
+                val.textContent = '9';
+            } else {
+                val.textContent = String(Number(val.textContent) - 1);
+            }
+        });
+    }
+
+    betUp('hund');
+    betUp('ten');
+    betUp('one');
+    betDown('hund');
+    betDown('ten');
+    betDown('one');
+
     return {
         updateCardDisplay,
         revealDealerCards,
@@ -233,8 +268,34 @@ const GameCtrl = (() => {
     
 
     function betStage(){
+        //clear hands
+        player.resetHand();
+        dealer.resetHand();
+
+        DisplayCtrl.updateCardDisplay();
         DisplayCtrl.changeConsole(0);
+
+        //add function to remember previous bet
     }
+
+    const betbtn = document.querySelector('#bet-button');
+    betbtn.addEventListener('click',(e) => {
+        e.preventDefault();
+
+        const hund = document.querySelector('.hund-digit').textContent;
+        const ten = document.querySelector('.ten-digit').textContent;
+        const one = document.querySelector('.one-digit').textContent;
+
+        let bet = (Number(hund) * 100) + (Number(ten) * 10) + Number(one)
+
+        //cannot bet zero
+        if (bet === 0){
+            alert('Please place a bet');
+        } else {
+            player.setBet = bet;
+            newRound();
+        }
+    });
 
 
 
@@ -244,9 +305,7 @@ const GameCtrl = (() => {
 
 
     function newRound(){
-        //clear hands
-        player.resetHand();
-        dealer.resetHand();
+
 
         DisplayCtrl.changeConsole(1);
 
@@ -368,12 +427,13 @@ const GameCtrl = (() => {
 
         console.log('round end');
         DisplayCtrl.changeConsole(2);
-        setTimeout(newRound, 3000);
+        setTimeout(betStage, 3000);
     }
 
 
     //start game
     // newRound();
-    DisplayCtrl.changeConsole(0);
+
+    betStage();
 
 })();
