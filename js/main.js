@@ -5,6 +5,7 @@ class Player {
     }
     _hand = []
     _handValue = 0
+    _bet = 0
 
     get getChips(){
         return this._chips;
@@ -22,6 +23,17 @@ class Player {
 
     get getHandValue(){
         return this._handValue;
+    }
+
+    get getBet(){
+        return this._bet;
+    }
+    set setBet(n){
+        if (n > this._chips){
+            this._bet = this._chips;
+        } else {
+            this._bet = n;
+        }
     }
 
     addToHand(arr){
@@ -105,34 +117,34 @@ const Deck = (() => {
         return shuffleDeck(initDeck(num));
     }
 
-    let deck = initShuffledDeck(_numOfDecks);
+    let _deck = initShuffledDeck(_numOfDecks);
 
     // returns array of card values
     // reshuffles new decks if run out
     function drawCards(numOfCards){
-        if (deck.length < numOfCards){
+        if (_deck.length < numOfCards){
 
-            if (deck.length == 0){
-                deck = Deck.initShuffledDeck(_numOfDecks);
-                return deck.splice(0, numOfCards);
+            if (_deck.length == 0){
+                _deck = initShuffledDeck(_numOfDecks);
+                return _deck.splice(0, numOfCards);
             }
 
             // add rest of deck to array
             let arr = [];
-            numOfCards -= deck.length;
-            arr = deck.splice(0,deck.length);
+            numOfCards -= _deck.length;
+            arr = _deck.splice(0,_deck.length);
 
             // set deck to new shuffled deck
-            deck = Deck.initShuffledDeck(_numOfDecks);
+            _deck = initShuffledDeck(_numOfDecks);
 
             // pull remaining cards
             for(let i = 0; i < numOfCards; i++){
-                arr.push(deck.pop());
+                arr.push(_deck.pop());
             }
             return arr;
 
         } else {
-            return deck.splice(0,numOfCards);
+            return _deck.splice(0,numOfCards);
         }
     }
 
@@ -141,7 +153,6 @@ const Deck = (() => {
     }
 
     return {
-        deck,
         draw
     }
 })();
@@ -218,6 +229,13 @@ const GameCtrl = (() => {
     /////////////////////////////////////////////
     //             BETTING STAGE               //
     /////////////////////////////////////////////
+
+    
+
+    function betStage(){
+        DisplayCtrl.changeConsole(0);
+    }
+
 
 
     /////////////////////////////////////////////
@@ -355,23 +373,7 @@ const GameCtrl = (() => {
 
 
     //start game
-    newRound();
+    // newRound();
+    DisplayCtrl.changeConsole(0);
 
 })();
-
-
-
-//game flow
-
-//player places bet
-//deal cards
-
-//player chooses to hit or stand
-//player can hit until bust
-
-//after player stands, dealer hits/stands with the following logic:
-//if cards value is less than 17, hit until at or above seventeen, else stand
-
-//reveal dealerhand
-
-// round over

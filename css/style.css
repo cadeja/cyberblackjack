@@ -110,8 +110,28 @@ main > * {
 }
 
 .betting {
-  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  margin: 50px;
 }
+
+.set-bet {
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.set-bet > div {
+  width: 50%;
+}
+
+.bet-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+}
+
 
 .playing {
   display: flex;
@@ -136,6 +156,7 @@ main > * {
   justify-content: center;
   align-items: center;
 }
+
 
 
 /******************************************
