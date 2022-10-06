@@ -213,9 +213,19 @@ const DisplayCtrl = (() => {
         chips.textContent = player.getChips;
     }
 
+    //change text on "round-end" section
+    function changeText(strArray){
+        const console = document.querySelector('.round-end');
+        console.innerHTML = '';
+        for(let i = 0; i < strArray.length; i++){
+            console.innerHTML += `<div>${strArray[i]}</div>`;
+        }
+    }
 
-    //betting console
-    
+    ///////////////////////////
+    //    BETTING CONSOLE    //   
+    ///////////////////////////
+
     // value must be 'hund', 'ten', or 'one'
     function betUp(value){
         const valUp = document.querySelector(`.${value}-up`);
@@ -251,7 +261,8 @@ const DisplayCtrl = (() => {
         updateCardDisplay,
         revealDealerCards,
         changeConsole,
-        updateChips
+        updateChips,
+        changeText
     }
 })();
 
@@ -272,6 +283,7 @@ const GameCtrl = (() => {
         player.resetHand();
         dealer.resetHand();
 
+        DisplayCtrl.changeText(['']);
         DisplayCtrl.updateCardDisplay();
         DisplayCtrl.changeConsole(0);
 
@@ -404,6 +416,8 @@ const GameCtrl = (() => {
 
     function blackjack(){
         console.log('blackjack');
+        DisplayCtrl.changeConsole(2);
+        DisplayCtrl.changeText(['You got blackjack']);
         dealerTurn();
     }
 
@@ -413,18 +427,26 @@ const GameCtrl = (() => {
         switch(result){
             case 'win':
                 console.log('you win the round');
+                DisplayCtrl.changeText([`You win the round!`, `+ ${player.getBet * 2} chips`]);
+                player.updateChips(player.getBet * 2);
                 break;
             case 'naturalwin':
                 console.log('natural blackjack! + 1.5x bet chips');
+                DisplayCtrl.changeText([`Blackjack!`,`+ ${player.getBet * 3} chips`]);
+                player.updateChips(player.getBet * 3);
                 break;
             case 'lose':
                 console.log('dealer wins the round');
+                DisplayCtrl.changeText(['Dealer wins the round.', 'No chips returned']);
                 break;
             case 'tie':
                 console.log('you tie. Bet returned');
+                DisplayCtrl.changeText(['You tied.','Bet returned.']);
+                player.updateChips(player.getBet);
                 break;
         }
 
+        DisplayCtrl.updateChips();
         console.log('round end');
         DisplayCtrl.changeConsole(2);
         setTimeout(betStage, 3000);
@@ -434,6 +456,7 @@ const GameCtrl = (() => {
     //start game
     // newRound();
 
+    DisplayCtrl.updateChips();
     betStage();
 
 })();
