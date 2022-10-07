@@ -180,7 +180,7 @@ main {
 }
 
 .set-bet {
-  height: 80%;
+  height: 70%;
   width: 180px;
   display: flex;
   justify-content: center;
@@ -195,6 +195,10 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
+}
+
+.debt {
+  visibility: hidden;
 }
 
 
@@ -225,6 +229,7 @@ main {
   height: 50px;
 
 }
+
 
 
 

@@ -29,11 +29,12 @@ class Player {
         return this._bet;
     }
     set setBet(n){
-        if (n > this._chips){
-            this._bet = this._chips;
-        } else {
-            this._bet = n;
-        }
+        // if (n > this._chips){
+        //     this._bet = this._chips;
+        // } else {
+        //     this._bet = n;
+        // }
+        this._bet = n;
 
         this.updateChips(- this._bet);
     }
@@ -283,11 +284,22 @@ const GameCtrl = (() => {
         player.resetHand();
         dealer.resetHand();
 
+        // sets debt message and color
+        if (player.getChips < 0){
+            document.querySelector('.debt').style.visibility = 'visible';
+            document.querySelector(':root').style.setProperty('--light-color', 'red');
+            document.querySelector('body').style.background = 'black';
+        } else {
+            document.querySelector('.debt').style.visibility = 'hidden';
+            document.querySelector(':root').style.setProperty('--light-color', 'rgb(45, 243, 45)');
+            document.querySelector('body').style.background = '#001100';
+        }
+
+
         DisplayCtrl.changeText(['']);
         DisplayCtrl.updateCardDisplay();
         DisplayCtrl.changeConsole(0);
 
-        //add function to remember previous bet
     }
 
     const betbtn = document.querySelector('#bet-button');
