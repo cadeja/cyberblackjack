@@ -26,12 +26,17 @@
   src: url("../assets/fonts/digital-7.ttf");
 }
 
+:root{
+  --light-color: rgb(45, 243, 45);
+}
+
+
+
 body {
   height: 100vh;
   background: #001100;
-  color: green;
+  color: var(--light-color);
 
-  font-size: 18px;
   font-family: "digital-7";
 
 }
@@ -39,8 +44,60 @@ body {
 button {
   background: none;
   border: none;
-  color: green;
+  color: var(--light-color);
   font-family: "digital-7";
+
+  font-size: 1.2rem;
+}
+
+/* FONT SIZES */
+
+html {
+  font-size: 30px;
+}
+
+h1 {
+  font-size: 25px;
+}
+
+button {
+  font-size: 1.2rem;
+}
+
+.console {
+  font-size: 1.2rem;
+}
+
+/* BORDERS */
+
+main {
+  border: 4px solid var(--light-color);
+}
+
+.dealer-cards,
+.player-cards,
+.console,
+.stand,
+.hit {
+  border-bottom: 2px solid var(--light-color);
+}
+
+.player-cards,
+.console,
+.chips,
+.double-down,
+.split {
+  border-top: 2px solid var(--light-color);
+}
+
+.stand,
+.double-down {
+  border-right: 2px solid var(--light-color);
+}
+
+.hit,
+.split {
+  border-left: 2px solid var(--light-color);
 }
 
 /******************************************
@@ -59,21 +116,25 @@ header {
 }
 
 footer {
-  height: 20px;
-  font-size: .8em;
+  height: 50px;
+  font-size: 18px;
+  padding-bottom: 5px;
+}
+
+.center {
+  height: calc(100% - 100px);
+  
+  display: flex;
+  justify-content: center;
 }
 
 main {
   display: flex;
   flex-direction: column;
-
-  height: calc(100% - 90px);
+  
+  width: min(100%, 600px);
 
   margin:10px;
-}
-
-main > * {
-  border: 1px solid green;
 }
 
 
@@ -89,7 +150,7 @@ main > * {
 .card {
   margin: 10px;
 
-  font-size: 2em;
+  font-size: 2rem;
 }
 
 
@@ -113,12 +174,14 @@ main > * {
 
 .betting {
   display: flex;
+  align-items: center;
   flex-direction: column;
   margin: 50px;
 }
 
 .set-bet {
   height: 80%;
+  width: 180px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -141,7 +204,6 @@ main > * {
 }
 
 .playing > button{
-  border: 1px solid green;
   width: 50%;
 }
 
@@ -161,6 +223,7 @@ main > * {
   justify-content: center;
   align-items: center;
   height: 50px;
+
 }
 
 
@@ -168,3 +231,13 @@ main > * {
 /******************************************
 /* ADDITIONAL STYLES
 /*******************************************/
+
+/* @media  screen and (min-width: 300px) {
+  html {
+    font-size: 30px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+} */
